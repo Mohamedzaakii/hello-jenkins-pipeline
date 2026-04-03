@@ -26,12 +26,13 @@ pipeline {
         stage('Local Deployment') {
             steps {
                 sh """java -jar target/hello-demo-*.jar > /dev/null &"""
+                sh 'sleep 15' 
             }   
         }
 
         stage('Integration Testing') {
             steps {
-                sh 'sleep 5s'
+                
                 sh 'curl -s http://localhost:6767/hello'
             }
         } 
