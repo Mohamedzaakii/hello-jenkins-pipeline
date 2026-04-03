@@ -1,40 +1,32 @@
 pipeline {
     agent any
-    tools {
-        maven 'M391'
-    }    
     stages {
-        stage('Maven Version') {
-            steps {
-                sh 'echo Print Maven Version'
-                sh 'mvn -version'
-            }
-        }
-        stage('Build') {
-            steps {
-                sh 'mvn clean package -DskipTests=true'
-                archiveArtifacts 'target/hello-demo-*.jar'
-            }
-        }
         stage('Test') {
             steps {
                 sh 'mvn test'
-                junit(testResults: 'target/surefire-reports/TST-*.xml', keepProperties: true, keepTestNames: true)
+                junit(testResults: 'target/surefire-reports/TEST-*.xml', keepProperties: true, keepTestNames: true)
             }
         }
-    
-        stage('Local Deployment') {
+        stage('Containerization') {
             steps {
-                sh """java -jar target/hello-demo-*.jar > /dev/null &"""
-            }   
+                sh 'echo Docker Build Image..'
+                sh 'echo Docker Tag Image....'
+                sh 'echo Docker Push Image......'
+            }
         }
-
+        stage('Kubernetes Deployment') {
+            steps {
+                sh 'echo Deploy to Kubernetes using [GitOps with ArgoCD](https://learn.kodekloud.com/user/courses/gitops-with-argocd)'
+            }
+        }
         stage('Integration Testing') {
             steps {
                 sh "sleep ${params.SLEEP_TIME}"
                 sh 'echo Testing using CURL commands......'
             }
-        } 
-
+        }
+    }
+    tools {
+        maven 'M391'
     }
 }
