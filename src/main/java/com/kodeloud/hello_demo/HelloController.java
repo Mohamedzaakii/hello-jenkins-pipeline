@@ -1,13 +1,11 @@
 package com.kodeloud.hello_demo;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@RestController
-public class HelloController {
-    
-    @RequestMapping("/hello")
-    String hello() {
-        return "Hello, KodeKloud community!";
+@SpringBootApplication
+public class HelloDemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(HelloDemoApplication.class, args);
     }
 }
