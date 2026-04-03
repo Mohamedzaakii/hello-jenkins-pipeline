@@ -1,39 +1,37 @@
 pipeline {
     agent any
-
-    tools {
-        // Install the Maven version configured as "M398" and add it to the path.
-        maven "M391"
-    }
-
     stages {
-        stage('Echo Version') {
+        stage('Maven Version') {
             steps {
-                sh "echo Print Maven Version"
-                sh "mvn -version"
+                sh 'echo Print Maven Version'
+                sh 'mvn -version'
             }
         }
         stage('Build') {
             steps {
-                // No explicit Git checkout required since SCM performs the checkout automatically
-                sh "mvn clean package -DskipTests=true"
+                sh 'mvn clean package -DskipTests=true'
+                archiveArtifacts 'target/hello-demo-*.jar'
             }
         }
-        
-        stage('Unit Test') {
-          steps {
-            script {
-              for (int i = 0; i < 60; i++) {
-                echo "${i + 1}"
-                sleep 1
-              }
-              sh "mvn test"
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+                junit(testResults: 'target/surefire-reports/TST-*.xml', keepProperties: true, keepTestNames: true)
             }
-          }  
+        }
+    
+        stage('Local Deployment') {
+            steps {
+                sh """java -jar target/hello-demo-*.jar > /dev/null &"""
+            }   
         }
 
-
-
+        stage('Integration Testing') {
+            steps {
+                sh 'sleep 5s'
+                sh 'curl -s http://localhost:6767/hello'
+            }
+        } 
 
     }
 }
