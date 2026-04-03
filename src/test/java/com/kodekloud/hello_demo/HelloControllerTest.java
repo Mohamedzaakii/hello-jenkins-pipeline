@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 @WebMvcTest(HelloController.class)
 public class HelloControllerTest {
@@ -40,13 +41,13 @@ public class HelloControllerTest {
     public void welcome_responseIsNotNull() throws Exception {
         mvc.perform(get("/hello").accept(MediaType.APPLICATION_JSON))
            .andExpect(status().isOk())
-           .andExpect(content().string(org.hamcrest.Matchers.notNullValue()));
+           .andExpect(content().string(notNullValue()));
     }
 
     @Test
     public void welcome_responseIsNotEmpty() throws Exception {
         mvc.perform(get("/hello").accept(MediaType.APPLICATION_JSON))
            .andExpect(status().isOk())
-           .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.emptyString())));
+           .andExpect(content().string(not(emptyString())));
     }
 }
