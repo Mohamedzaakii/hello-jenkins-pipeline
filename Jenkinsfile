@@ -19,7 +19,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'mvn test'
-                junit(testResults: 'target/surefire-reports/TST-*.xml', keepProperties: true, keepTestNames: true)
+                junit(testResults: 'target/surefire-reports/TEST-*.xml', keepProperties: true, keepTestNames: true)
             }
         }
     
