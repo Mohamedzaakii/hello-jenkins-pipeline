@@ -27,6 +27,6 @@ pipeline {
         }
     }
     tools {
-        maven 'M391'
+        maven 'M398'
     }
 }
